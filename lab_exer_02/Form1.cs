@@ -66,19 +66,32 @@ namespace lab_exer_02
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-            string productName = txtProductName.Text;
-            string category = cbCategory.SelectedItem.ToString();
-            string mfgDate = dtPickerMfgDate.Value.ToString("dd/MM/yyyy");
-            string expDate = dtPickerExpDate.Value.ToString("dd/MM/yyyy");
-            double price = double.Parse(txtSellPrice.Text);
-            int quantity = int.Parse(txtQuantity.Text);
-            string description = richTxtDescription.Text;
+            try
+            {
+                string productName = Product_Name(txtProductName.Text);
+                int quantity = Quantity(txtQuantity.Text);
+                double price = SellingPrice(txtSellPrice.Text);
+                string category = cbCategory.SelectedItem.ToString();
+                string mfgDate = dtPickerMfgDate.Value.ToString("dd/MM/yyyy");
+                string expDate = dtPickerExpDate.Value.ToString("dd/MM/yyyy");
+                string description = richTxtDescription.Text;
 
-            // Create new Product
-            ProductClass product = new ProductClass(productName, category, mfgDate, expDate, price, quantity, description);
-
-            // Add product to BindingSource
-            showProductList.Add(product);
+                // Create new Product and add it to the DataGridView
+                ProductClass product = new ProductClass(productName, category, mfgDate, expDate, price, quantity, description);
+                gridViewProductList.Rows.Add(product.productName, product.category, product.manufacturingDate, product.expirationDate, product.sellingPrice, product.quantity, product.description);
+            }
+            catch (NumberFormatException ex)
+            {
+                MessageBox.Show(ex.Message, "Number Format Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (StringFormatException ex)
+            {
+                MessageBox.Show(ex.Message, "String Format Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (CurrencyFormatException ex)
+            {
+                MessageBox.Show(ex.Message, "Currency Format Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
