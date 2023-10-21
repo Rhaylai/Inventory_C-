@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static lab_exer_02.InvalidProductException;
 
 namespace lab_exer_02
 {
@@ -26,7 +27,7 @@ namespace lab_exer_02
         {
             if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
             {
-                throw new InvalidProductException("Product name must only contain letters");
+                throw new StringFormatException("Product name must only contain letters");
             }
             return name;
         }
@@ -35,7 +36,7 @@ namespace lab_exer_02
         {
             if (!Regex.IsMatch(qty, @"^[0-9]"))
             {
-                throw new InvalidProductException("Quantity must be a number");
+                throw new NumberFormatException("Quantity must be a number");
             }
             return Convert.ToInt32(qty);
         }
@@ -44,10 +45,11 @@ namespace lab_exer_02
         {
             if (!Regex.IsMatch(price.ToString(), @"^(\d*\.)?\d+$"))
             {
-                throw new InvalidProductException("Price must be a number");
+                throw new CurrencyFormatException("Price must be a number");
             }
             return Convert.ToDouble(price);
-        }
+        } /*Further modified the code  to throw these custom exceptions when the input does not match the specified regular expression */
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -64,19 +66,32 @@ namespace lab_exer_02
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-            string productName = txtProductName.Text;
-            string category = cbCategory.SelectedItem.ToString();
-            string mfgDate = dtPickerMfgDate.Value.ToString("dd/MM/yyyy");
-            string expDate = dtPickerExpDate.Value.ToString("dd/MM/yyyy");
-            double price = double.Parse(txtSellPrice.Text);
-            int quantity = int.Parse(txtQuantity.Text);
-            string description = richTxtDescription.Text;
+            try
+            {
+                string productName = Product_Name(txtProductName.Text);
+                int quantity = Quantity(txtQuantity.Text);
+                double price = SellingPrice(txtSellPrice.Text);
+                string category = cbCategory.SelectedItem.ToString();
+                string mfgDate = dtPickerMfgDate.Value.ToString("dd/MM/yyyy");
+                string expDate = dtPickerExpDate.Value.ToString("dd/MM/yyyy");
+                string description = richTxtDescription.Text;
 
-            // Create new Product
-            ProductClass product = new ProductClass(productName, category, mfgDate, expDate, price, quantity, description);
-
-            // Add product to BindingSource
-            showProductList.Add(product);
+                // Create new Product and add it to the BindingSource
+                ProductClass product = new ProductClass(productName, category, mfgDate, expDate, price, quantity, description);
+                showProductList.Add(product);
+            }
+            catch (NumberFormatException ex)
+            {
+                MessageBox.Show(ex.Message, "Number Format Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (StringFormatException ex)
+            {
+                MessageBox.Show(ex.Message, "String Format Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (CurrencyFormatException ex)
+            {
+                MessageBox.Show(ex.Message, "Currency Format Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
