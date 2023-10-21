@@ -10,9 +10,12 @@ namespace lab_exer_02
     
 public class ProductClass
     {
+
         private int _Quantity;
         private double _SellingPrice;
         private string _ProductName, _Category, _ManufacturingDate, _ExpirationDate, _Description;
+   
+
 
         public ProductClass(string ProductName, string Category, string MfgDate, string ExpDate, double Price, int Quantity, string Description)
         {
