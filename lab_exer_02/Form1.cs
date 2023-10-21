@@ -76,9 +76,9 @@ namespace lab_exer_02
                 string expDate = dtPickerExpDate.Value.ToString("dd/MM/yyyy");
                 string description = richTxtDescription.Text;
 
-                // Create new Product and add it to the DataGridView
+                // Create new Product and add it to the BindingSource
                 ProductClass product = new ProductClass(productName, category, mfgDate, expDate, price, quantity, description);
-                gridViewProductList.Rows.Add(product.productName, product.category, product.manufacturingDate, product.expirationDate, product.sellingPrice, product.quantity, product.description);
+                showProductList.Add(product);
             }
             catch (NumberFormatException ex)
             {
