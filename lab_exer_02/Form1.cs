@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static lab_exer_02.InvalidProductException;
 
 namespace lab_exer_02
 {
@@ -26,7 +27,7 @@ namespace lab_exer_02
         {
             if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
             {
-                throw new InvalidProductException("Product name must only contain letters");
+                throw new StringFormatException("Product name must only contain letters");
             }
             return name;
         }
@@ -35,7 +36,7 @@ namespace lab_exer_02
         {
             if (!Regex.IsMatch(qty, @"^[0-9]"))
             {
-                throw new InvalidProductException("Quantity must be a number");
+                throw new NumberFormatException("Quantity must be a number");
             }
             return Convert.ToInt32(qty);
         }
@@ -44,10 +45,11 @@ namespace lab_exer_02
         {
             if (!Regex.IsMatch(price.ToString(), @"^(\d*\.)?\d+$"))
             {
-                throw new InvalidProductException("Price must be a number");
+                throw new CurrencyFormatException("Price must be a number");
             }
             return Convert.ToDouble(price);
-        }
+        } /*Further modified the code  to throw these custom exceptions when the input does not match the specified regular expression */
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
